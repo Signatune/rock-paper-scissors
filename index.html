@@ -9,16 +9,50 @@
 </html>
 
 <script>
-  console.log('Hello world!')
-
-  const THROW_OPTIONS = ['rock', 'paper', 'scissors']
+  const THROW_OPTIONS = ["rock", "paper", "scissors"];
+  const VICTORY_TABLE = {
+    rock: "scissors",
+    scissors: "paper",
+    paper: "rock",
+  };
 
   // getComputerChoice
   function getComputerChoice() {
-  // generate random number 1 to 3
-    let choice = Math.floor(Math.random() * 3)
-  // assign R P S based on number
-  // return result 
-    return THROW_OPTIONS[choice]
+    // generate random number 1 to 3
+    let choice = Math.floor(Math.random() * 3);
+    // assign R P S based on number
+    // return result
+    return THROW_OPTIONS[choice];
+  }
+
+  // playRound(playerChoice, computerChoice)
+  function playRound(playerChoice, computerChoice) {
+    // standardize playerChoice by converting to lowercase
+    let playerChoiceLower = playerChoice.toLowerCase();
+    // if choices are the same, return draw result
+    if (playerChoiceLower === computerChoice) {
+      return `Draw! Nobody wins.`;
+    }
+    // check victory table for player choice
+    // if victory table says that player choice beats computer choice
+    if (VICTORY_TABLE[playerChoiceLower] === computerChoice) {
+      // return winning result
+      return `You won! ${playerChoiceLower} beats ${computerChoice}`;
+    } else {
+      //otherwise return losing result
+      return `You lost! ${computerChoice} beats ${playerChoiceLower}`;
+    }
+  }
+
+  function game() {
+    // loop 5 times for 5 games
+    for (let i = 0; i < 5; i++) {
+      // ask player for their choice and store choice
+      let playerChoice = prompt("Shoot!");
+      // generate computer choice
+      let computerChoice = getComputerChoice();
+      // play round and show result
+      console.log(playRound(playerChoice, computerChoice));
+    }
   }
 </script>
