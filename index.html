@@ -5,7 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rock Paper Scissors</title>
   </head>
-  <body></body>
+  <body>
+    <button id="rock">Rock</button>
+    <button id="paper">Paper</button>
+    <button id="scissors">Scissors</button>
+    <div class="scoreboard">
+      <p class="player-score">Player: <span>0</span></p>
+      <p class="computer-score">Computer: <span>0</span></p>
+    </div>
+    <div class="game-log">
+      <ul>
+        
+      </ul>
+    </div>
+  </body>
 </html>
 
 <script>
@@ -16,43 +29,46 @@
     paper: "rock",
   };
 
-  // getComputerChoice
   function getComputerChoice() {
-    // generate random number 1 to 3
     let choice = Math.floor(Math.random() * 3);
-    // assign R P S based on number
-    // return result
     return THROW_OPTIONS[choice];
   }
 
-  // playRound(playerChoice, computerChoice)
+  function incrementScore(player) {
+    const score = document.querySelector(`p.${player}-score > span`)
+
+    score.textContent = parseInt(score.textContent) + 1
+  }
+
+  function appendGameLog(result) {
+    const gameLog = document.querySelector('.game-log > ul')
+
+    const newEntry = document.createElement('li')
+    newEntry.textContent = result
+
+    gameLog.appendChild(newEntry)
+  }
+
   function playRound(playerChoice, computerChoice) {
-    // standardize playerChoice by converting to lowercase
     let playerChoiceLower = playerChoice.toLowerCase();
-    // if choices are the same, return draw result
     if (playerChoiceLower === computerChoice) {
-      return `Draw! Nobody wins.`;
-    }
-    // check victory table for player choice
-    // if victory table says that player choice beats computer choice
-    if (VICTORY_TABLE[playerChoiceLower] === computerChoice) {
-      // return winning result
-      return `You won! ${playerChoiceLower} beats ${computerChoice}`;
+      appendGameLog(`Draw! Nobody wins.`)
+    } else if (VICTORY_TABLE[playerChoiceLower] === computerChoice) {
+      incrementScore('player')
+      appendGameLog(`You won! ${playerChoiceLower} beats ${computerChoice}`)
     } else {
-      //otherwise return losing result
-      return `You lost! ${computerChoice} beats ${playerChoiceLower}`;
+      incrementScore('computer')
+      appendGameLog(`You lost! ${computerChoice} beats ${playerChoiceLower}`)
     }
   }
 
-  function game() {
-    // loop 5 times for 5 games
-    for (let i = 0; i < 5; i++) {
-      // ask player for their choice and store choice
-      let playerChoice = prompt("Shoot!");
-      // generate computer choice
-      let computerChoice = getComputerChoice();
-      // play round and show result
-      console.log(playRound(playerChoice, computerChoice));
-    }
-  }
+  const buttons = document.querySelectorAll("button");
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      const playerSelection = button.getAttribute("id");
+
+      console.log(playRound(playerSelection, getComputerChoice()));
+    });
+  });
 </script>
